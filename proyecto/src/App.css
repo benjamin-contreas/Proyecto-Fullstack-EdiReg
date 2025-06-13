@@ -1,0 +1,33 @@
+body {
+  background-color: #0a152e;
+  font-family: 'Roboto', monospace;
+}
+
+
+.App {
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: rgb(148, 163, 184);
+  text-align: center;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: rgba(148, 163, 184, 0.868);
+  text-align: center;
+}
+
+.lenguaje {
+  display: flex;
+  justify-content: flex-end;
+  bottom: 10px;
+  right: 0;
+  position: fixed;
+}

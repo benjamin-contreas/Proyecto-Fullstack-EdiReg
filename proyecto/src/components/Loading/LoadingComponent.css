@@ -1,0 +1,19 @@
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  /* Usa el 100% de la altura de la ventana de visualización */
+    font-size: 24px;
+    color: rgb(148, 163, 184);
+    background-color: #0a152e;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+.loading-container {
+    animation: fadeIn 0.5s ease-in-out;
+}

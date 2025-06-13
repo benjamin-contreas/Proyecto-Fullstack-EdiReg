@@ -1,0 +1,69 @@
+{
+	"proxy": "https://localhost:4000",
+	"name": "proyecto",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@auth0/auth0-react": "^2.2.4",
+		"@sentry/react": "^8.7.0",
+		"@sentry/tracing": "^7.114.0",
+		"@testing-library/jest-dom": "^5.17.0",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^13.5.0",
+		"axios": "^1.7.2",
+		"browserify-zlib": "^0.2.0",
+		"buffer": "^6.0.3",
+		"dotenv": "^16.4.5",
+		"https-browserify": "^1.0.0",
+		"i18next": "^23.11.5",
+		"i18next-browser-languagedetector": "^7.2.1",
+		"i18next-http-backend": "^2.5.1",
+		"i18next-locize-backend": "^6.4.2",
+		"loglevel": "^1.9.1",
+		"logrocket": "^8.1.0",
+		"os-browserify": "^0.3.0",
+		"path-browserify": "^1.0.1",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-i18next": "^14.1.2",
+		"react-icons": "^5.0.1",
+		"react-router-dom": "^6.22.3",
+		"react-scripts": "5.0.1",
+		"react-scroll": "^1.9.0",
+		"react-tsparticles": "^2.12.2",
+		"socket.io-client": "^4.7.5",
+		"stream-http": "^3.2.0",
+		"styled-components": "^6.1.8",
+		"util": "^0.12.5",
+		"web-vitals": "^2.1.4",
+		"winston": "^3.13.0"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^6.4.6",
+		"@testing-library/react": "^16.0.0"
+	}
+}

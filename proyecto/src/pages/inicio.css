@@ -1,0 +1,20 @@
+#root {
+    background-image: url('../img/fondo2.avif'); /* Ensure the path is correct */
+    background-size: cover; /* Cover the entire screen */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    min-height: 100vh; /* Minimum height to cover the full viewport height */
+    width: 100vw; /* Width to cover full viewport width */
+}
+
+
+#root.no-background {
+    background-image: none;
+  }
+
+
+.Inicio {
+    margin-top: 2rem;
+}
+
+

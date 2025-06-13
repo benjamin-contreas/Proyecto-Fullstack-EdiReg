@@ -1,0 +1,15 @@
+.container-2 {
+    text-align: center;
+    color: rgb(148, 163, 184);
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container-2-form {
+    margin-top: 5vh;
+	backdrop-filter: blur(5px);
+	border-radius: 30px;
+}

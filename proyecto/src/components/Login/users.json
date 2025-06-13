@@ -1,0 +1,20 @@
+{
+	"users": [
+		{
+			"email": "agudiaaz1@gmail.com",
+			"role": "admin"
+		},
+		{
+			"email": "agubk112@gmail.com",
+			"role": "viewer"
+		},
+		{
+			"email": "jtomas.arancibiab@gmail.com",
+			"role": "admin"
+		},
+		{
+			"email": "benja.contrerasg@gmail.com",
+			"role": "admin"
+		}
+	]
+}
