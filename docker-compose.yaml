@@ -1,25 +1,42 @@
-version: '3.9'
-
 services:
- backend:
-  build: ./backend
-  container_name: backend_container
-  ports:
-   - '4000:4000'
-  volumes:
-   - ./backend:/app
-  env_file:
-   - ./backend/.env
+  mongo:
+    image: mongo:7
+    container_name: edireg_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - edireg_mongo_data:/data/db
 
- frontend:
-  build: ./proyecto
-  container_name: frontend_container
-  ports:
-   - '3000:3000'
-  volumes:
-   - ./proyecto:/app
-  depends_on:
-   - backend
-  env_file:
-   - ./proyecto/.env
-  stdin_open: true
+  backend:
+    build: ./backend
+    container_name: edireg_backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    environment:
+      MONG_URI: mongodb://mongo:27017/edireg
+      PORT: 4000
+      FRONTEND_URL: http://localhost:3000
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: edireg_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    env_file:
+      - ./frontend/.env
+    environment:
+      REACT_APP_API_URL: http://localhost:4000
+    depends_on:
+      - backend
+    stdin_open: true
+
+volumes:
+  edireg_mongo_data:
