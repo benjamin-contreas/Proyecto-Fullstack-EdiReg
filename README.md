@@ -1,178 +1,162 @@
 # EdiReg
 
-**EdiReg** es una aplicación web full-stack para la gestión de recepción en edificios y condominios. Fue desarrollada de forma individual como proyecto académico para el ramo **Programación Profesional**, durante cuarto año de Ingeniería Civil Informática en la **Universidad Adolfo Ibáñez**.
+**EdiReg** es una aplicación web full-stack basada en el stack **MERN** para digitalizar procesos de recepción en edificios y condominios. El sistema centraliza el registro de visitas, la administración de visitantes frecuentes, la recepción de paquetes y la gestión de estacionamientos de visita.
 
-El proyecto busca centralizar procesos habituales de conserjería, como el registro de visitas, la gestión de visitas frecuentes, la recepción de paquetes y el uso de estacionamientos de visita.
+Fue desarrollado de forma individual en 2024 para el ramo **Programación Profesional**, durante cuarto año de Ingeniería Civil Informática en la **Universidad Adolfo Ibáñez**.
 
-> **Estado del proyecto:** proyecto académico finalizado en 2024. El repositorio conserva la implementación desarrollada durante el curso, pero actualmente no se encuentra completamente funcional y algunas integraciones externas requieren reconfiguración.
+> **Estado:** proyecto académico finalizado. El código fue posteriormente ordenado y documentado para portfolio; algunas integraciones externas, como Auth0, Locize y Mailgun, requieren credenciales propias para volver a habilitar todas las funcionalidades.
 
 ## Descripción general
 
-EdiReg fue diseñado como una aplicación **MERN** con una arquitectura frontend-backend separada.
+EdiReg separa frontend y backend en aplicaciones independientes:
 
-El frontend está desarrollado con **React** y consume una API REST construida con **Node.js** y **Express**. La persistencia de datos se implementa con **MongoDB** y **Mongoose**.
+- **React** para la interfaz web.
+- **Node.js + Express** para la API REST.
+- **MongoDB + Mongoose** para persistencia.
+- **Auth0** para autenticación en el frontend.
+- **Mailgun** para notificaciones de paquetes por correo.
+- **Socket.IO + node-cron** para la implementación experimental de alertas de estacionamiento.
+- **i18next + Locize** para internacionalización.
 
-El sistema permite gestionar distintos flujos de recepción de un edificio desde una interfaz web:
+## Funcionalidades
 
-- registrar visitas;
-- crear, consultar, actualizar y eliminar visitas frecuentes;
-- buscar visitas frecuentes por RUT o patente;
-- registrar paquetes recibidos;
-- enviar notificaciones por correo electrónico a residentes cuando reciben un paquete;
-- gestionar estacionamientos de visita;
-- autenticar usuarios mediante Auth0;
-- utilizar la interfaz en distintos idiomas.
+### Visitas
 
-El proyecto original también contemplaba funcionalidades como notificaciones mediante WhatsApp y extracción automática de datos desde cédulas de identidad. Estas funcionalidades quedaron fuera del alcance de la implementación final.
+- Registro de visitas.
+- CRUD de visitantes frecuentes.
+- Búsqueda de visitantes frecuentes por RUT.
+- Búsqueda por patente.
+- Asociación opcional de un estacionamiento cuando la visita ingresa en vehículo.
 
-## Funcionalidades principales
+### Paquetes
 
-### Gestión de visitas
+- Consulta de residentes por número de residencia.
+- Registro de paquetes recibidos en conserjería.
+- Selección de residentes a notificar.
+- Envío de correo mediante Mailgun cuando la integración está configurada.
 
-El backend expone endpoints para registrar visitas y mantener un registro de visitantes frecuentes.
+### Estacionamientos
 
-Entre las operaciones implementadas se encuentran:
+- Creación y consulta de estacionamientos.
+- Asignación de un espacio disponible.
+- Cambio del estado de uso.
+- Configuración de duración y tiempo de aviso.
+- Implementación parcial de alertas mediante Socket.IO.
 
-- búsqueda de visitantes frecuentes por RUT;
-- búsqueda por patente del vehículo;
-- creación de visitantes frecuentes;
-- actualización de sus datos;
-- eliminación de visitantes frecuentes;
-- registro de una nueva visita al edificio.
+### Autenticación e idiomas
 
-### Recepción de paquetes
+- Autenticación de la interfaz mediante Auth0.
+- Navegación con React Router.
+- Internacionalización mediante i18next y Locize.
 
-El sistema permite registrar paquetes recibidos en conserjería y asociarlos a una residencia.
-
-Cuando se registra un paquete, el backend puede enviar una notificación por correo electrónico a los residentes asociados utilizando **Mailgun**.
-
-### Gestión de estacionamientos
-
-La aplicación incluye lógica para registrar y administrar estacionamientos de visita, consultar espacios disponibles y cambiar su estado de uso.
-
-El repositorio también contiene una implementación parcial de temporizadores y notificaciones en tiempo real asociadas al tiempo máximo de estacionamiento. Esta parte no se considera una funcionalidad completamente terminada dentro del proyecto.
-
-### Autenticación e internacionalización
-
-El frontend integra:
-
-- **Auth0** para autenticación;
-- **i18next / react-i18next** para internacionalización;
-- **React Router** para navegación entre vistas.
-
-## Tecnologías utilizadas
+## Stack tecnológico
 
 | Área | Tecnologías |
 | --- | --- |
-| Frontend | React, React Router, Axios, Styled Components |
+| Frontend | React, React Router, Styled Components |
 | Backend | Node.js, Express |
 | Base de datos | MongoDB, Mongoose |
 | Autenticación | Auth0 |
-| Comunicación en tiempo real | Socket.IO |
-| Tareas programadas | node-cron |
 | Email | Mailgun |
+| Tiempo real | Socket.IO |
+| Tareas programadas | node-cron |
 | Internacionalización | i18next, react-i18next, Locize |
 | Contenedores | Docker, Docker Compose |
+| Testing backend | Node.js Test Runner |
 | Control de versiones | Git, GitHub |
 
 ## Arquitectura
 
-El repositorio está dividido principalmente en dos aplicaciones:
-
 ```text
-Proyecto-TICS420/
+Proyecto-Fullstack-EdiReg/
 ├── backend/
 │   ├── controllers/
 │   ├── models/
 │   ├── routes/
+│   ├── tests/
+│   ├── .env.example
 │   ├── scheduler.js
-│   ├── server.js
-│   └── package.json
-├── proyecto/
+│   └── server.js
+├── frontend/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
+│   │   ├── config/
 │   │   ├── context/
 │   │   └── pages/
-│   ├── package.json
-│   └── Dockerfile
-└── docker-compose.yaml
+│   ├── .env.example
+│   └── package.json
+├── docs/
+│   └── Detalles-Proyecto-Edificios.pdf
+├── docker-compose.yaml
+└── README.md
 ```
 
 ### Backend
 
-El backend sigue una separación basada en:
+El backend utiliza una separación simple:
 
 ```text
 Routes → Controllers → Models → MongoDB
 ```
 
-Las rutas de Express reciben las solicitudes HTTP, los controladores implementan la lógica de aplicación y los modelos de Mongoose representan las entidades persistidas en MongoDB.
-
-Las principales entidades del backend incluyen:
-
-- visitantes frecuentes;
-- registros de visitas;
-- paquetes;
-- residencias;
-- estacionamientos de visita;
-- configuración de temporizadores.
+Las principales entidades son visitantes frecuentes, registros de visitas, paquetes, residencias, usuarios asociados a residencias, estacionamientos y configuración del temporizador.
 
 ### Frontend
 
-El frontend está construido como una Single Page Application con React.
-
-Las principales vistas incluyen:
-
-- inicio;
-- registro y búsqueda de visitas;
-- gestión de visitas frecuentes;
-- recepción de paquetes;
-- gestión de estacionamientos.
-
-El frontend se comunica con el backend mediante solicitudes HTTP y utiliza Socket.IO Client para la lógica experimental de notificaciones en tiempo real.
+El frontend es una Single Page Application en React. Las URLs hacia el backend se centralizan mediante `REACT_APP_API_URL`, evitando acoplar las vistas a una dirección local fija.
 
 ## Ejecución local
 
 ### Requisitos
 
-Para ejecutar el proyecto localmente se necesita:
-
-- Node.js;
-- npm;
-- MongoDB ejecutándose localmente;
-- una aplicación configurada en Auth0;
-- una cuenta/configuración de Mailgun para probar notificaciones por correo.
+- Node.js 22 o compatible.
+- npm.
+- MongoDB local, o Docker si se utiliza Docker Compose.
+- Credenciales de Auth0 para autenticación.
+- Configuración opcional de Locize y Mailgun.
 
 ### Variables de entorno
 
-Crear un archivo `.env` dentro de `backend/`:
-
-```env
-MONG_URI=mongodb://127.0.0.1:27017/edireg
-PORT=4000
-MAILGUN_API_KEY=tu_api_key
-```
-
-El nombre `edireg` de la base de datos es solo un ejemplo y puede reemplazarse por cualquier base de datos MongoDB local.
-
-Crear otro archivo `.env` dentro de `proyecto/`:
-
-```env
-REACT_APP_AUTH0_DOMAIN=tu-dominio.auth0.com
-REACT_APP_AUTH0_CLIENT_ID=tu_client_id
-```
-
-No se deben subir credenciales reales al repositorio.
-
-### 1. Clonar el repositorio
+Crear los archivos reales a partir de los ejemplos:
 
 ```bash
-git clone https://github.com/benjamin-contreas/Proyecto-TICS420.git
-cd Proyecto-TICS420
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
 ```
 
-### 2. Instalar y ejecutar el backend
+Backend:
+
+```env
+PORT=4000
+MONG_URI=mongodb://127.0.0.1:27017/edireg
+FRONTEND_URL=http://localhost:3000
+MAILGUN_API_KEY=
+MAILGUN_DOMAIN=
+```
+
+Frontend:
+
+```env
+REACT_APP_API_URL=http://localhost:4000
+REACT_APP_AUTH0_DOMAIN=
+REACT_APP_AUTH0_CLIENT_ID=
+REACT_APP_LOCIZE_PROJECT_ID=
+REACT_APP_LOCIZE_API_KEY=
+```
+
+Las credenciales reales no deben versionarse.
+
+### Ejecución con npm
+
+Clonar el repositorio:
+
+```bash
+git clone https://github.com/benjamin-contreas/Proyecto-Fullstack-EdiReg.git
+cd Proyecto-Fullstack-EdiReg
+```
+
+Backend:
 
 ```bash
 cd backend
@@ -180,40 +164,49 @@ npm install
 npm run dev
 ```
 
-El backend escucha por defecto en:
-
-```text
-http://localhost:4000
-```
-
-### 3. Instalar y ejecutar el frontend
-
-En otra terminal:
+Frontend, en otra terminal:
 
 ```bash
-cd proyecto
+cd frontend
 npm install
 npm start
 ```
 
-El frontend se ejecuta en:
+La interfaz utiliza `http://localhost:3000` y la API `http://localhost:4000` por defecto.
 
-```text
-http://localhost:3000
+### Ejecución con Docker Compose
+
+Después de crear los archivos `.env`:
+
+```bash
+docker compose up --build
 ```
 
-> Debido a que el proyecto fue finalizado en 2024 y actualmente no se mantiene como aplicación activa, puede ser necesario ajustar configuraciones de Auth0, Mailgun, MongoDB o URLs locales para volver a ejecutar todas las funcionalidades.
+La configuración incluye tres servicios:
+
+- MongoDB.
+- Backend Express.
+- Frontend React.
+
+## Tests
+
+El backend incluye una suite pequeña de pruebas de validación de modelos usando el runner nativo de Node.js, sin dependencias adicionales:
+
+```bash
+cd backend
+npm test
+```
+
+Las pruebas cubren requisitos de datos, enums, valores por defecto y verifican que el modelo de usuario no almacene contraseñas.
 
 ## API REST
-
-El backend agrupa sus endpoints bajo `/api`.
 
 ### Visitas
 
 | Método | Endpoint | Descripción |
 | --- | --- | --- |
 | GET | `/api/visits/searchRut?rut=...` | Buscar visitante frecuente por RUT |
-| GET | `/api/visits/searchPlate?vehicleLicensePlate=...` | Buscar visitante frecuente por patente |
+| GET | `/api/visits/searchPlate?vehicleLicensePlate=...` | Buscar por patente |
 | POST | `/api/visits/newFrequentVisitor` | Crear visitante frecuente |
 | POST | `/api/visits/visitRegistry` | Registrar visita |
 | PATCH | `/api/visits/:rut` | Actualizar visitante frecuente |
@@ -223,7 +216,7 @@ El backend agrupa sus endpoints bajo `/api`.
 
 | Método | Endpoint | Descripción |
 | --- | --- | --- |
-| POST | `/api/packages/createPackage` | Registrar paquete y procesar notificación por email |
+| POST | `/api/packages/createPackage` | Registrar paquete y procesar notificaciones configuradas |
 
 ### Estacionamientos
 
@@ -231,7 +224,7 @@ El backend agrupa sus endpoints bajo `/api`.
 | --- | --- | --- |
 | GET | `/api/parkingSpace/allSpaces` | Obtener estacionamientos |
 | POST | `/api/parkingSpace/createSpace` | Crear estacionamiento |
-| POST | `/api/parkingSpace/assignSpace` | Asignar estacionamiento disponible |
+| POST | `/api/parkingSpace/assignSpace` | Asignar espacio disponible |
 | PATCH | `/api/parkingSpace/toggleUse/:id` | Cambiar estado de uso |
 
 ### Residencias
@@ -241,9 +234,7 @@ El backend agrupa sus endpoints bajo `/api`.
 | GET | `/api/residence/:residenceNumber` | Obtener residencia |
 | POST | `/api/residence` | Crear residencia |
 
-### Configuración de temporizador
-
-El repositorio también contiene endpoints para una funcionalidad de temporizador desarrollada parcialmente:
+### Temporizador
 
 | Método | Endpoint | Descripción |
 | --- | --- | --- |
@@ -252,44 +243,41 @@ El repositorio también contiene endpoints para una funcionalidad de temporizado
 
 ## Contexto del proyecto
 
-La idea original de EdiReg nace de la necesidad de digitalizar procesos habituales en la recepción de edificios y condominios.
+El requerimiento original planteaba una plataforma para agilizar procesos de conserjería: recepción de paquetes, control de visitas frecuentes y ocasionales, registro de vehículos y administración del tiempo de permanencia en estacionamientos.
 
-El requerimiento planteaba una plataforma capaz de centralizar la recepción de paquetes, registrar visitas frecuentes y ocasionales, gestionar vehículos y estacionamientos, y facilitar la comunicación entre conserjería y residentes.
+La implementación final priorizó una aplicación web end-to-end con persistencia en MongoDB y una API REST que conecta los distintos flujos.
 
-La implementación final priorizó las funcionalidades principales de gestión de visitas, paquetes y estacionamientos mediante una arquitectura web full-stack.
+**[Ver documento original de contexto y requerimientos](docs/Detalles-Proyecto-Edificios.pdf)**
 
-Para revisar el documento original con los requerimientos y contexto del proyecto:
+## Decisiones y aprendizajes
 
-**[Ver documento de contexto del proyecto](docs/Detalles-Proyecto-Edificios.pdf)**
+Este proyecto me permitió trabajar de manera práctica en:
 
-## Aprendizajes
+- diseño de APIs REST con Express;
+- modelado de datos con MongoDB y Mongoose;
+- integración entre frontend React y backend Node.js;
+- diseño de una aplicación end-to-end;
+- integración de autenticación y servicios externos;
+- configuración mediante variables de entorno;
+- Docker y separación de servicios;
+- Git y GitHub para control de versiones.
 
-Este proyecto permitió aplicar de forma práctica varias áreas del desarrollo de software:
+## Alcance y mejoras futuras
 
-- diseño e implementación de APIs REST con Express;
-- integración entre un frontend React y un backend Node.js;
-- modelado y persistencia de datos con MongoDB y Mongoose;
-- diseño de una aplicación web end-to-end;
-- autenticación mediante un proveedor externo;
-- integración de servicios externos como Mailgun;
-- uso de Git y GitHub para control de versiones;
-- organización de un backend mediante rutas, controladores y modelos.
+El proyecto conserva algunas decisiones propias de su contexto académico. Las principales extensiones posibles serían:
 
-## Mejoras futuras
+- ampliar tests hacia controladores y endpoints;
+- incorporar validación de payloads con un esquema dedicado;
+- proteger también los endpoints del backend con autorización;
+- reemplazar alertas del navegador por notificaciones dentro de la interfaz;
+- completar el flujo de alertas de estacionamiento;
+- incorporar notificaciones por WhatsApp;
+- agregar lectura automática de datos desde cédulas;
+- añadir soporte multi-condominio;
+- desplegar la aplicación en infraestructura cloud.
 
-Algunas mejoras que permitirían evolucionar el proyecto son:
-
-- restaurar y actualizar las integraciones externas para volver a ejecutar la aplicación completa;
-- agregar tests automatizados para frontend y backend;
-- incorporar validación y manejo de errores más robustos;
-- proteger los endpoints del backend mediante autorización;
-- completar el sistema de alertas de estacionamiento;
-- reemplazar las alertas del navegador por un sistema de notificaciones dentro de la interfaz;
-- implementar notificaciones mediante WhatsApp;
-- incorporar lectura automática de datos desde una cédula de identidad;
-- agregar una configuración multi-condominio;
-- desplegar frontend, backend y base de datos en infraestructura cloud.
+Las notificaciones por WhatsApp y la lectura automática de cédulas formaban parte de ideas del requerimiento original, pero **no fueron implementadas** en la versión final.
 
 ## Autor
 
-Proyecto desarrollado individualmente por **Benjamín Contreras** como parte del ramo **Programación Profesional** de Ingeniería Civil Informática en la Universidad Adolfo Ibáñez.
+Desarrollado individualmente por **Benjamín Contreras** como proyecto del ramo **Programación Profesional** de Ingeniería Civil Informática en la Universidad Adolfo Ibáñez.
