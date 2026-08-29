@@ -262,8 +262,6 @@ Para revisar el documento original con los requerimientos y contexto del proyect
 
 **[Ver documento de contexto del proyecto](docs/Detalles-Proyecto-Edificios.pdf)**
 
-> El enlace estará disponible una vez que el PDF sea agregado al repositorio en `docs/Detalles-Proyecto-Edificios.pdf`.
-
 ## Aprendizajes
 
 Este proyecto permitió aplicar de forma práctica varias áreas del desarrollo de software:
