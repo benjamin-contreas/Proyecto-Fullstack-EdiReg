@@ -6,34 +6,28 @@ import LanguageButton from './components/LanguageButton';
 import LoadingComponent from './components/Loading/LoadingComponent';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import { API_URL } from './config/api';
 import { LanguageContext } from './context/Contexts';
 import FrequentVisitor from './pages/FrequentVisitor';
-import ParkingTimer from './pages/Parking_Timer';
+import ParkingTimer from './pages/ParkingTimer';
 import Visits from './pages/Visits';
-import Bienvenida from './pages/bienvenida';
+import Bienvenida from './pages/Bienvenida';
 import Delivery from './pages/Delivery';
-import Inicio from './pages/inicio';
+import Inicio from './pages/Inicio';
 
-const socket = io('http://localhost:4000');
+const socket = io(API_URL);
 
 function MainApp() {
 	const [currentLanguage, setCurrentLanguage] = useState('en');
 	const [isOpen, setIsOpen] = useState(false);
 	const location = useLocation();
-
-	const toggle = () => {
-		setIsOpen(!isOpen);
-	};
+	const toggle = () => setIsOpen((open) => !open);
 
 	return (
 		<LanguageContext.Provider value={{ currentLanguage, setCurrentLanguage }}>
 			{location.pathname !== '/' && <Sidebar isOpen={isOpen} toggle={toggle} />}
 			{location.pathname !== '/' && <Navbar toggle={toggle} />}
-			{location.pathname !== '/' && (
-				<div className="lenguaje">
-					<LanguageButton />
-				</div>
-			)}
+			{location.pathname !== '/' && <div className="lenguaje"><LanguageButton /></div>}
 			<Routes>
 				<Route path="/" element={<Bienvenida />} />
 				<Route path="/inicio" element={<Inicio />} />
@@ -48,18 +42,12 @@ function MainApp() {
 
 function App() {
 	useEffect(() => {
-		socket.on('notifyConcierge', (message) => {
-			console.log(message);
-			alert(message); // Replace this with a more suitable notification mechanism
-		});
+		const handleNotification = (message) => window.alert(message);
+		socket.on('notifyConcierge', handleNotification);
+		return () => socket.off('notifyConcierge', handleNotification);
 	}, []);
-	return (
-		<BrowserRouter>
-			<Suspense fallback={<LoadingComponent />}>
-				<MainApp />
-			</Suspense>
-		</BrowserRouter>
-	);
+
+	return <BrowserRouter><Suspense fallback={<LoadingComponent />}><MainApp /></Suspense></BrowserRouter>;
 }
 
 export default App;

@@ -1,15 +1,15 @@
 {
-	"name": "backend",
+	"name": "edireg-backend",
 	"version": "1.0.0",
-	"description": "",
+	"description": "API REST de EdiReg para gestión de visitas, paquetes y estacionamientos.",
 	"main": "server.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "node --test tests/*.test.js",
 		"start": "node server.js",
 		"dev": "nodemon server.js"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": ["express", "mongodb", "mongoose", "rest-api"],
+	"author": "Benjamín Contreras",
 	"license": "ISC",
 	"dependencies": {
 		"cors": "^2.8.5",
