@@ -1,4 +1,5 @@
 import React from 'react';
+import { API_URL } from '../../config/api';
 
 const ParkingSpacesList = ({ parkingSpaces }) => {
 	const toggleUse = async (id, isOnUse) => {
@@ -6,7 +7,7 @@ const ParkingSpacesList = ({ parkingSpaces }) => {
 		if (isOnUse) {
 			try {
 				const response = await fetch(
-					`http://localhost:4000/api/parkingSpace/toggleUse/${id}`,
+					`${API_URL}/api/parkingSpace/toggleUse/${id}`,
 					{
 						method: 'PATCH',
 						headers: {

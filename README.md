@@ -176,7 +176,18 @@ La interfaz utiliza `http://localhost:3000` y la API `http://localhost:4000` por
 
 ### Ejecución con Docker Compose
 
-Después de crear los archivos `.env`:
+Docker Compose no monta el código fuente en los contenedores: construye imágenes
+del frontend, backend y MongoDB. Para incluir Auth0 en el build del frontend,
+configurar sus variables en PowerShell antes de iniciar:
+
+```powershell
+$env:REACT_APP_AUTH0_DOMAIN = "tu-dominio.us.auth0.com"
+$env:REACT_APP_AUTH0_CLIENT_ID = "tu-client-id"
+```
+
+Sin estas dos variables, los contenedores y las rutas públicas inician, pero el
+inicio de sesión no está disponible. La autorización por roles se restaurará
+en la Issue #6.
 
 ```bash
 docker compose up --build
@@ -187,6 +198,9 @@ La configuración incluye tres servicios:
 - MongoDB.
 - Backend Express.
 - Frontend React.
+
+Los tres servicios incluyen health checks. La aplicación queda disponible en
+`http://localhost:3000`, y la API en `http://localhost:4000`.
 
 ## Tests
 

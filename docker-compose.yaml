@@ -1,42 +1,53 @@
 services:
   mongo:
     image: mongo:7
-    container_name: edireg_mongo
     ports:
       - "27017:27017"
     volumes:
       - edireg_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   backend:
     build: ./backend
-    container_name: edireg_backend
     ports:
       - "4000:4000"
-    volumes:
-      - ./backend:/app
-    env_file:
-      - ./backend/.env
     environment:
       MONG_URI: mongodb://mongo:27017/edireg
       PORT: 4000
       FRONTEND_URL: http://localhost:3000
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4000/').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   frontend:
-    build: ./frontend
-    container_name: edireg_frontend
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:4000}
+        REACT_APP_AUTH0_DOMAIN: ${REACT_APP_AUTH0_DOMAIN:-}
+        REACT_APP_AUTH0_CLIENT_ID: ${REACT_APP_AUTH0_CLIENT_ID:-}
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-    env_file:
-      - ./frontend/.env
-    environment:
-      REACT_APP_API_URL: http://localhost:4000
+      - "3000:80"
     depends_on:
-      - backend
-    stdin_open: true
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --quiet http://127.0.0.1/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   edireg_mongo_data:
