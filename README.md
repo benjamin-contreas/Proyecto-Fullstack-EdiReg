@@ -63,7 +63,7 @@ EdiReg separa frontend y backend en aplicaciones independientes:
 | Tareas programadas | node-cron |
 | Internacionalización | i18next, react-i18next, Locize |
 | Contenedores | Docker, Docker Compose |
-| Testing backend | Node.js Test Runner |
+| Testing | Node.js Test Runner, Playwright, MongoDB Memory Server |
 | Control de versiones | Git, GitHub |
 
 ## Arquitectura
@@ -130,7 +130,7 @@ Backend:
 
 ```env
 PORT=4000
-MONG_URI=mongodb://127.0.0.1:27017/edireg
+MONG_URI=mongodb://127.0.0.1:27017/edireg?replicaSet=rs0&directConnection=true
 FRONTEND_URL=http://localhost:3000
 AUTH0_ISSUER_BASE_URL=https://tu-dominio.us.auth0.com/
 AUTH0_AUDIENCE=https://api.edireg.app
@@ -234,14 +234,17 @@ Auth0 del backend, las operaciones protegidas fallan de forma segura con `503`.
 docker compose up --build
 ```
 
-La configuración incluye tres servicios:
+La configuración incluye los tres servicios de la aplicación y un inicializador:
 
-- MongoDB.
+- MongoDB configurado como replica set de un nodo.
+- Inicializador idempotente del replica set.
 - Backend Express.
 - Frontend React.
 
-Los tres servicios incluyen health checks. La aplicación queda disponible en
-`http://localhost:3000`, y la API en `http://localhost:4000`.
+Los servicios de la aplicación incluyen health checks. El replica set permite
+que el registro de una visita y la asignación opcional de estacionamiento se
+confirmen o reviertan como una única transacción. La aplicación queda disponible
+en `http://localhost:3000`, y la API en `http://localhost:4000`.
 
 ### Datos de demostración
 
@@ -281,6 +284,21 @@ que el modelo de usuario no almacene contraseñas. La autorización se prueba co
 un issuer, JWT y JWKS locales: se ejercita la misma verificación de firma,
 issuer, audience y permisos que en producción sin contactar el tenant Auth0.
 
+El frontend incluye una prueba end-to-end del flujo de visitas. Ejecuta la
+interfaz en Chromium, la API Express con JWT firmado por un issuer local y un
+replica set efímero de MongoDB. No requiere credenciales de Auth0 ni una base de
+datos persistente:
+
+```bash
+cd frontend
+npx playwright install chromium
+npm run test:e2e
+```
+
+La prueba crea y busca un Visitante Frecuente, registra un Registro de Visita,
+comprueba el rechazo de solicitudes anónimas y verifica que un fallo no consuma
+otro Estacionamiento de Visita.
+
 ## API REST
 
 La ruta `/` permanece pública para health checks. Todas las rutas `/api/*`
@@ -295,7 +313,7 @@ flujos diarios `write:operations` y la configuración administrativa
 | GET | `/api/visits/searchRut?rut=...` | Buscar visitante frecuente por RUT |
 | GET | `/api/visits/searchPlate?vehicleLicensePlate=...` | Buscar por patente |
 | POST | `/api/visits/newFrequentVisitor` | Crear visitante frecuente |
-| POST | `/api/visits/visitRegistry` | Registrar visita |
+| POST | `/api/visits/visitRegistry` | Registrar visita y asignar estacionamiento de forma transaccional |
 | PATCH | `/api/visits/:rut` | Actualizar visitante frecuente |
 | DELETE | `/api/visits/:rut` | Eliminar visitante frecuente |
 

@@ -1,5 +1,6 @@
 const FrequentVisitor = require('../models/frequentVisitorModel');
-const mongoose = require('mongoose');
+const Residence = require('../models/residenceModel');
+const { normalizeRut, normalizeVehicleLicensePlate } = require('../domain/visitorIdentity');
 
 /**
  * Get frequent visitor by RUT.
@@ -11,10 +12,10 @@ const mongoose = require('mongoose');
 const getFrequentVisitor = async (req, res) => {
 	const { rut } = req.query;
 
-	const frequentVisitor = await FrequentVisitor.findOne({ rut });
+	const frequentVisitor = await FrequentVisitor.findOne({ rut: normalizeRut(rut) });
 
 	if (!frequentVisitor) {
-		return res.status(404).json({ error: 'No such visitor' });
+		return res.status(404).json({ error: 'visitor_not_found', message: 'Frequent visitor not found' });
 	}
 
 	res.status(200).json(frequentVisitor);
@@ -30,10 +31,12 @@ const getFrequentVisitor = async (req, res) => {
 const getFrequentVisitorByPlate = async (req, res) => {
 	const { vehicleLicensePlate } = req.query;
 
-	const frequentVisitor = await FrequentVisitor.findOne({ vehicleLicensePlate });
+	const frequentVisitor = await FrequentVisitor.findOne({
+		vehicleLicensePlate: normalizeVehicleLicensePlate(vehicleLicensePlate),
+	});
 
 	if (!frequentVisitor) {
-		return res.status(404).json({ error: 'No such visitor' });
+		return res.status(404).json({ error: 'visitor_not_found', message: 'Frequent visitor not found' });
 	}
 
 	res.status(200).json(frequentVisitor);
@@ -53,6 +56,11 @@ const createFrequentVisitor = async (req, res) => {
 
 	// Add doc to db.
 	try {
+		const residenceNumber = Number(frequentApartment);
+		if (!Number.isInteger(residenceNumber)
+			|| !(await Residence.exists({ residenceNumber }))) {
+			return res.status(400).json({ error: 'residence_not_found', message: 'Residence does not exist' });
+		}
 		const frequentVisitor = await FrequentVisitor.create({
 			rut,
 			firstName,
@@ -60,9 +68,13 @@ const createFrequentVisitor = async (req, res) => {
 			frequentApartment,
 			vehicleLicensePlate,
 		});
-		res.status(200).json(frequentVisitor);
+		res.status(201).json(frequentVisitor);
 	} catch (error) {
-		res.status(400).json({ error: error.message });
+		const duplicate = error.code === 11000;
+		res.status(duplicate ? 409 : 400).json({
+			error: duplicate ? 'frequent_visitor_exists' : 'invalid_frequent_visitor',
+			message: error.message,
+		});
 	}
 };
 
@@ -77,7 +89,7 @@ const createFrequentVisitor = async (req, res) => {
 const deleteFrequentVisitor = async (req, res) => {
 	const { rut } = req.params;
 
-	const frequentVisitor = await FrequentVisitor.findOneAndDelete({ rut: rut });
+	const frequentVisitor = await FrequentVisitor.findOneAndDelete({ rut: normalizeRut(rut) });
 
 	if (!frequentVisitor) {
 		return res.status(400).json({ error: 'No such visitor' });
@@ -100,10 +112,11 @@ const updateFrequentVisitor = async (req, res) => {
 	const { rut } = req.params;
 
 	const frequentVisitor = await FrequentVisitor.findOneAndUpdate(
-		{ rut: rut },
+		{ rut: normalizeRut(rut) },
 		{
 			...req.body,
-		}
+		},
+		{ new: true, runValidators: true }
 	);
 
 	if (!frequentVisitor) {

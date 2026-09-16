@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaBars } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { animateScroll as scroll } from 'react-scroll';
+import logoImage from '../../img/image.png';
 import Profile from '../Login/Profile';
 import {
 	Logo,
@@ -41,10 +42,10 @@ const Navbar = ({ toggle }) => {
 	return (
 		<>
 			<IconContext.Provider value={{ color: '#fff' }}>
-				<Nav scrollNav={scrollNav}>
+				<Nav $scrollNav={scrollNav}>
 					<NavbarContainer>
 						<NavLogo to="/inicio" onClick={toggleHome}>
-							<Logo src={require('../../img/image.png')} alt="logo" />
+							<Logo src={logoImage} alt="logo" />
 						</NavLogo>
 						<MobileIcon onClick={toggle}>
 							<FaBars />
