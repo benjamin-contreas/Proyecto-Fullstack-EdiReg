@@ -20,6 +20,8 @@ services:
       MONG_URI: mongodb://mongo:27017/edireg
       PORT: 4000
       FRONTEND_URL: http://localhost:3000
+      AUTH0_ISSUER_BASE_URL: ${AUTH0_ISSUER_BASE_URL:-}
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE:-}
     depends_on:
       mongo:
         condition: service_healthy
@@ -37,6 +39,8 @@ services:
         REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:4000}
         REACT_APP_AUTH0_DOMAIN: ${REACT_APP_AUTH0_DOMAIN:-}
         REACT_APP_AUTH0_CLIENT_ID: ${REACT_APP_AUTH0_CLIENT_ID:-}
+        REACT_APP_AUTH0_AUDIENCE: ${REACT_APP_AUTH0_AUDIENCE:-}
+        REACT_APP_AUTH0_ROLES_CLAIM: ${REACT_APP_AUTH0_ROLES_CLAIM:-https://edireg.app/roles}
     ports:
       - "3000:80"
     depends_on:

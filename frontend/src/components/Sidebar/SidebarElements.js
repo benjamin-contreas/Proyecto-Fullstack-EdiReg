@@ -70,7 +70,7 @@ export const SidebarLink = styled(LinkS)`
     }
 `;
 
-export const NavLinkr = styled(LinkR)`
+export const SidebarNavLink = styled(LinkR)`
     margin-bottom: 40px;
     display: flex;
     align-items: center;
