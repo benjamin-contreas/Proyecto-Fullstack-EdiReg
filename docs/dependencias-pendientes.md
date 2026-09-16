@@ -34,17 +34,9 @@ bajas; ninguna crítica). Sus rutas de corrección requieren cambios mayores:
 
 ## Backend
 
-`npm audit` informa 11 vulnerabilidades restantes (8 altas, 2 moderadas y 1
-crítica). Provienen de dos dependencias con actualizaciones mayores:
-
-- `mailgun-js` está deprecada y se usa todavía en
-  `backend/controllers/packageController.js`; su árbol mantiene rutas de
-  vulnerabilidades altas. La demostración no habilitará correo real; el
-  reemplazo o retiro del adaptador se abordará junto al flujo de paquetes.
-- `node-cron` 3 requiere una migración a la versión 4 para actualizar la ruta
-  vulnerable `node-cron → uuid@8.3.2`, que conserva la vulnerabilidad crítica.
-  Su cambio se revisará junto al rediseño de alertas de estacionamiento y del
-  reinicio programado de datos.
+Tras retirar `mailgun-js`, `npm audit` informa dos vulnerabilidades moderadas
+restantes. Su resolución se evaluará en un ticket dedicado, sin forzar
+actualizaciones masivas durante la restauración del flujo de paquetes.
 
 Estas decisiones preservan el alcance: no se aplican actualizaciones masivas
 forzadas ni una migración a Vite en este ticket.

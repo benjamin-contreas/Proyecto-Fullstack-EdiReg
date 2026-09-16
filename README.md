@@ -4,7 +4,7 @@
 
 Fue desarrollado de forma individual en 2024 para el ramo **Programación Profesional**, durante cuarto año de Ingeniería Civil Informática en la **Universidad Adolfo Ibáñez**.
 
-> **Estado:** proyecto académico finalizado. El código fue posteriormente ordenado y documentado para portfolio; algunas integraciones externas, como Auth0, Locize y Mailgun, requieren credenciales propias para volver a habilitar todas las funcionalidades.
+> **Estado:** proyecto académico finalizado. El código fue posteriormente ordenado y documentado para portfolio; las integraciones externas pendientes, como Auth0 y Locize, requieren credenciales propias para habilitar todas las funcionalidades.
 
 ## Descripción general
 
@@ -14,7 +14,6 @@ EdiReg separa frontend y backend en aplicaciones independientes:
 - **Node.js + Express** para la API REST.
 - **MongoDB + Mongoose** para persistencia.
 - **Auth0** para autenticación y autorización verificadas en frontend y backend.
-- **Mailgun** para notificaciones de paquetes por correo.
 - **Socket.IO + node-cron** para la implementación experimental de alertas de estacionamiento.
 - **i18next + Locize** para internacionalización.
 
@@ -32,8 +31,7 @@ EdiReg separa frontend y backend en aplicaciones independientes:
 
 - Consulta de residentes por número de residencia.
 - Registro de paquetes recibidos en conserjería.
-- Selección de residentes a notificar.
-- Envío de correo mediante Mailgun cuando la integración está configurada.
+- Estado explícito de notificación por correo no configurada.
 
 ### Estacionamientos
 
@@ -58,7 +56,6 @@ EdiReg separa frontend y backend en aplicaciones independientes:
 | Backend | Node.js, Express |
 | Base de datos | MongoDB, Mongoose |
 | Autenticación | Auth0 |
-| Email | Mailgun |
 | Tiempo real | Socket.IO |
 | Tareas programadas | node-cron |
 | Internacionalización | i18next, react-i18next, Locize |
@@ -115,7 +112,7 @@ El frontend es una Single Page Application en React. Las URLs hacia el backend s
 - npm.
 - MongoDB local, o Docker si se utiliza Docker Compose.
 - Credenciales de Auth0 para autenticación.
-- Configuración opcional de Locize y Mailgun.
+- Configuración opcional de Locize.
 
 ### Variables de entorno
 
@@ -134,8 +131,6 @@ MONG_URI=mongodb://127.0.0.1:27017/edireg?replicaSet=rs0&directConnection=true
 FRONTEND_URL=http://localhost:3000
 AUTH0_ISSUER_BASE_URL=https://tu-dominio.us.auth0.com/
 AUTH0_AUDIENCE=https://api.edireg.app
-MAILGUN_API_KEY=
-MAILGUN_DOMAIN=
 ```
 
 Frontend:
@@ -321,7 +316,7 @@ flujos diarios `write:operations` y la configuración administrativa
 
 | Método | Endpoint | Descripción |
 | --- | --- | --- |
-| POST | `/api/packages/createPackage` | Registrar paquete y procesar notificaciones configuradas |
+| POST | `/api/packages/createPackage` | Registrar paquete y comunicar que el correo no está configurado |
 
 ### Estacionamientos
 

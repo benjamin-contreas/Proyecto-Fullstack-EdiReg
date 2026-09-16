@@ -1,14 +1,14 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 
 const CourierInfo = ({ courierInfo, handleCourierInfoChange }) => {
-	const { t } = useTranslation("delivery");
+	const { t } = useTranslation('app');
 	return (
 		<>
-			<h3 className="h3">Courier Info</h3>
+			<h3 className="h3">{t('delivery.courierInformation')}</h3>
 			<div className="mb-3">
 				<label htmlFor="courier-firstName" className="form-label">
-					{t('First Name')}
+					{t('delivery.firstName')}
 				</label>
 				<input
 					type="text"
@@ -20,7 +20,7 @@ const CourierInfo = ({ courierInfo, handleCourierInfoChange }) => {
 			</div>
 			<div className="mb-3">
 				<label htmlFor="courier-lastName" className="form-label">
-					{t('Last Name')}
+					{t('delivery.lastName')}
 				</label>
 				<input
 					type="text"
@@ -32,7 +32,7 @@ const CourierInfo = ({ courierInfo, handleCourierInfoChange }) => {
 			</div>
 			<div className="mb-3">
 				<label htmlFor="courier-rut" className="form-label">
-					RUT
+					{t('delivery.rut')}
 				</label>
 				<input
 					type="text"
@@ -44,7 +44,7 @@ const CourierInfo = ({ courierInfo, handleCourierInfoChange }) => {
 			</div>
 			<div className="mb-3">
 				<label htmlFor="courier-vehicleLicensePlate" className="form-label">
-					{t('Vehicle License Plate')}
+					{t('delivery.vehicleLicensePlate')}
 				</label>
 				<input
 					type="text"

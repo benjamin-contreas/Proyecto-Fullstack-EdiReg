@@ -1,25 +1,23 @@
 const Package = require('../models/packageModel');
-require('dotenv').config();
-const mailgun = require('mailgun-js');
+const Residence = require('../models/residenceModel');
 
 const createPackage = async (req, res) => {
-	const { targetResidenceId, description, deliveredAt, status, courierInfo, residentMails = [] } = req.body;
+	const { targetResidenceId, description, deliveredAt, status, courierInfo } = req.body;
 	try {
-		const packageEntry = await Package.create({ targetResidenceId, description, deliveredAt, status, courierInfo });
-
-		if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
-			const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
-			await Promise.all(residentMails.map((to) => mg.messages().send({
-				from: `EdiReg <postmaster@${process.env.MAILGUN_DOMAIN}>`,
-				to,
-				subject: `Package ${status}`,
-				text: `Your package with the description "${description}" has been ${status}.`,
-			})));
+		const residence = await Residence.exists({ _id: targetResidenceId });
+		if (!residence) {
+			return res.status(404).json({ error: 'residence_not_found' });
 		}
-
-		res.status(201).json(packageEntry);
+		const packageEntry = await Package.create({ targetResidenceId, description, deliveredAt, status, courierInfo });
+		return res.status(201).json({
+			packageEntry,
+			notification: { status: 'not_configured' },
+		});
 	} catch (error) {
-		res.status(400).json({ error: error.message });
+		if (error.name === 'ValidationError' || error.name === 'CastError') {
+			return res.status(400).json({ error: 'invalid_package' });
+		}
+		return res.status(500).json({ error: 'package_registration_failed' });
 	}
 };
 
