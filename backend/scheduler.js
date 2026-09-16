@@ -4,7 +4,7 @@ const TimerConfig = require('./models/timerConfigModel');
 
 nodeCron.schedule('* * * * *', async () => {
 	try {
-		const config = await TimerConfig.findOne({});
+		const config = await TimerConfig.findOne({ key: 'default' });
 		if (!config) return;
 
 		const nearingTimeLimitSpaces = await ParkingSpace.find({

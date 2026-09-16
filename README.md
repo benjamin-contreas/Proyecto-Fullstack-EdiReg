@@ -202,6 +202,29 @@ La configuración incluye tres servicios:
 Los tres servicios incluyen health checks. La aplicación queda disponible en
 `http://localhost:3000`, y la API en `http://localhost:4000`.
 
+### Datos de demostración
+
+La carga inicial crea residencias, residentes, paquetes, visitantes frecuentes,
+estacionamientos y una configuración de temporizador claramente ficticios. Es
+idempotente: se puede ejecutar más de una vez sin duplicar los fixtures.
+
+Con Docker Compose en ejecución:
+
+```powershell
+docker compose exec backend npm run seed
+```
+
+Para volver manualmente al estado base de los fixtures, ejecutar:
+
+```powershell
+docker compose exec -e DEMO_RESET_CONFIRM=reset backend npm run reset-demo
+```
+
+El reinicio solo elimina registros identificados como fixtures de demostración
+y exige una confirmación explícita. Es un comando de mantenimiento dentro del
+contenedor, no un endpoint de la API. En esta versión, las residencias y los
+residentes son datos de referencia de solo lectura.
+
 ## Tests
 
 El backend incluye una suite pequeña de pruebas de validación de modelos usando el runner nativo de Node.js, sin dependencias adicionales:
@@ -246,7 +269,6 @@ Las pruebas cubren requisitos de datos, enums, valores por defecto y verifican q
 | Método | Endpoint | Descripción |
 | --- | --- | --- |
 | GET | `/api/residence/:residenceNumber` | Obtener residencia |
-| POST | `/api/residence` | Crear residencia |
 
 ### Temporizador
 

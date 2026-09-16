@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const VisitorParkingSchema = new mongoose.Schema(
 	{
+		demoFixture: { type: Boolean, default: false },
 		parkingNumber: {
 			type: Number,
 			required: true,
