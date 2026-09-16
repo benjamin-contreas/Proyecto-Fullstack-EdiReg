@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const frequentVisitorSchema = new Schema(
 	{
+		demoFixture: { type: Boolean, default: false },
 		rut: {
 			type: String,
 			required: true,

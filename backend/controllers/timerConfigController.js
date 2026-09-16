@@ -3,7 +3,7 @@ const TimerConfig = require('../models/timerConfigModel');
 const updateConfig = async (req, res) => {
 	const { duration, notificationTime } = req.body;
 	try {
-		let config = await TimerConfig.findOne({});
+		let config = await TimerConfig.findOne({ key: 'default' });
 		if (config) {
 			config.duration = duration;
 			config.notificationTime = notificationTime;
@@ -19,7 +19,7 @@ const updateConfig = async (req, res) => {
 
 const getTimerConfig = async (req, res) => {
 	try {
-		const config = await TimerConfig.findOne({});
+		const config = await TimerConfig.findOne({ key: 'default' });
 		if (!config) {
 			return res.status(404).json({ message: 'Timer configuration not found' });
 		}

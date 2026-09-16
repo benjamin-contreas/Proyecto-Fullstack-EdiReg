@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const PackageSchema = new mongoose.Schema(
 	{
+		demoFixture: { type: Boolean, default: false },
 		targetResidenceId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Residence',

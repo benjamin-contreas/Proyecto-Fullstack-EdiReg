@@ -5,6 +5,8 @@
 	"main": "server.js",
 	"scripts": {
 		"test": "node --test tests/*.test.js",
+		"seed": "node scripts/demoDataCli.js seed",
+		"reset-demo": "node scripts/demoDataCli.js reset",
 		"start": "node server.js",
 		"dev": "nodemon server.js"
 	},

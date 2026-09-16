@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 require('./userModel');
 
 const ResidenceSchema = new mongoose.Schema({
+	demoFixture: { type: Boolean, default: false },
 	residenceNumber: {
 		type: Number,
 		required: true,

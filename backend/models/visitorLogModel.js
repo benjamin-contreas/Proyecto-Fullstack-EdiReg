@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const VisitorLogSchema = new mongoose.Schema(
 	{
+		demoFixture: { type: Boolean, default: false },
 		firstName: {
 			type: String,
 			required: true,

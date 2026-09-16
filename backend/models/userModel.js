@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+	demoFixture: { type: Boolean, default: false },
 	username: { type: String, required: true, unique: true },
 	role: { type: String, enum: ['resident', 'admin', 'concierge'], required: true },
 	userInfo: {

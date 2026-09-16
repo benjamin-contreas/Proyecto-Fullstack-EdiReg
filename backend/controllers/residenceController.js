@@ -27,28 +27,6 @@ const getResidence = async (req, res) => {
 	}
 };
 
-/**
- * Create a new residence.
- *
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {Promise<void>} - A promise that resolves when the residence is created.
- */
-const createResidence = async (req, res) => {
-	const { residenceNumber, residenceName, residents } = req.body;
-	try {
-		const user = await Residence.create({
-			residenceNumber,
-			residenceName,
-			residents,
-		});
-		res.status(200).json(user);
-	} catch (error) {
-		res.status(400).json({ error: error.message });
-	}
-};
-
 module.exports = {
-	createResidence,
 	getResidence,
 };
