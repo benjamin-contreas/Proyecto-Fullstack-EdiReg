@@ -3,13 +3,15 @@ import { useTranslation } from 'react-i18next';
 import VisitForm from '../components/Visits/VisitForm';
 import { useAuthenticatedFetch } from '../auth/useAuthenticatedFetch';
 import { API_URL } from '../config/api';
+import { apiMessageKey } from '../config/apiMessages';
 import './Visits.css';
 
 function Visits() {
 	const [visitorData, setVisitorData] = useState({
-		firstName: '', lastName: '', rut: '', residenceVisited: '', vehicleLicensePlate: '', visitParkingId: '',
+		firstName: '', lastName: '', rut: '', residenceVisited: '', vehicleLicensePlate: '',
 	});
 	const [error, setError] = useState(null);
+	const [success, setSuccess] = useState(null);
 	const [searchType, setSearchType] = useState('rut');
 	const [assignedParkingSpace, setAssignedParkingSpace] = useState(null);
 	const { t } = useTranslation('visits');
@@ -23,7 +25,9 @@ function Visits() {
 		try {
 			const response = await authenticatedFetch(`${API_URL}/api/visits/${isRut ? 'searchRut' : 'searchPlate'}?${query}`);
 			const data = await response.json();
-			if (!response.ok) throw new Error(data.error || 'Failed to fetch visitor');
+			if (!response.ok) {
+				throw new Error(t(apiMessageKey(data.error, 'app:visits.errors.searchFailed')));
+			}
 			setVisitorData((current) => ({ ...current, ...data, residenceVisited: data.frequentApartment }));
 			setError(null);
 		} catch (searchError) {
@@ -39,29 +43,19 @@ function Visits() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setError(null);
+		setSuccess(null);
 		try {
-			let visitParkingId = '';
-			let parkingNumber = null;
-
-			if (visitorData.vehicleLicensePlate) {
-				const parkingResponse = await authenticatedFetch(`${API_URL}/api/parkingSpace/assignSpace`, {
-					method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}),
-				});
-				const parkingData = await parkingResponse.json();
-				if (!parkingResponse.ok) throw new Error(parkingData.message || 'Failed to assign parking space');
-				visitParkingId = parkingData.id;
-				parkingNumber = parkingData.parkingNumber;
-			}
-
 			const response = await authenticatedFetch(`${API_URL}/api/visits/visitRegistry`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ ...visitorData, visitParkingId }),
+				body: JSON.stringify(visitorData),
 			});
 			const data = await response.json();
-			if (!response.ok) throw new Error(data.error || 'Failed to register visit');
-			setAssignedParkingSpace(parkingNumber);
-			window.alert(t('successful registration'));
+			if (!response.ok) {
+				throw new Error(t(apiMessageKey(data.error, 'app:visits.errors.registrationFailed')));
+			}
+			setAssignedParkingSpace(data.assignedParkingSpace?.parkingNumber ?? null);
+			setSuccess(t('app:visits.visitRegistered'));
 		} catch (submitError) {
 			setError(submitError.message);
 		}
@@ -83,7 +77,8 @@ function Visits() {
 					</form>
 				</div>
 				<VisitForm setVisitorData={setVisitorData} handleSubmit={handleSubmit} visitorData={visitorData} />
-				{error && <div className="error">{error}</div>}
+				{error && <div className="error" role="alert">{error}</div>}
+				{success && <div className="success" role="status">{success}</div>}
 				{assignedParkingSpace && <div className="alert alert-info"><strong>{t('Assigned Parking Space')}:</strong> {assignedParkingSpace}</div>}
 			</div>
 		</div>

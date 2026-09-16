@@ -41,15 +41,35 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
+		"test:e2e": "playwright test --config=playwright.config.js",
+		"e2e:gallery": "vite --config vite.e2e.config.js",
 		"eject": "react-scripts eject"
 	},
-	"eslintConfig": { "extends": ["react-app", "react-app/jest"] },
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
 	"browserslist": {
-		"production": [">0.2%", "not dead", "not op_mini all"],
-		"development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.63.0",
 		"@testing-library/jest-dom": "^6.4.6",
-		"@testing-library/react": "^16.0.0"
+		"@testing-library/react": "^16.0.0",
+		"@vitejs/plugin-react": "^6.1.1",
+		"mongodb": "^7.6.0",
+		"mongodb-memory-server": "^11.2.0",
+		"vite": "^8.3.0"
 	}
 }

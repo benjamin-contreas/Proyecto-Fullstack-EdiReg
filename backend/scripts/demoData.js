@@ -25,7 +25,7 @@ const packages = [
 ];
 
 const frequentVisitors = [
-	{ rut: '00.000.201-1', firstName: 'Elena', lastName: 'Visitante', frequentApartment: '101', vehicleLicensePlate: 'VISITA1' },
+	{ rut: '00000201-1', firstName: 'Elena', lastName: 'Visitante', frequentApartment: '101', vehicleLicensePlate: 'VISITA1' },
 ];
 
 const parkingSpaces = [1, 2, 3, 4, 5].map((parkingNumber) => ({ parkingNumber, isOnUse: false }));

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { normalizeRut, normalizeVehicleLicensePlate } = require('../domain/visitorIdentity');
 const Schema = mongoose.Schema;
 
 const frequentVisitorSchema = new Schema(
@@ -8,6 +9,7 @@ const frequentVisitorSchema = new Schema(
 			type: String,
 			required: true,
 			unique: true,
+			set: normalizeRut,
 		},
 		firstName: {
 			type: String,
@@ -23,6 +25,7 @@ const frequentVisitorSchema = new Schema(
 		},
 		vehicleLicensePlate: {
 			type: String,
+			set: normalizeVehicleLicensePlate,
 		},
 	},
 	{ timestamps: true }

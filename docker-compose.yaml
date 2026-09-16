@@ -1,6 +1,7 @@
 services:
   mongo:
     image: mongo:7
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     ports:
       - "27017:27017"
     volumes:
@@ -12,19 +13,27 @@ services:
       retries: 5
       start_period: 10s
 
+  mongo-init:
+    image: mongo:7
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: "no"
+    command: ["mongosh", "--host", "mongo:27017", "--quiet", "--eval", "try { rs.status() } catch (error) { rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'mongo:27017'}]}) }"]
+
   backend:
     build: ./backend
     ports:
       - "4000:4000"
     environment:
-      MONG_URI: mongodb://mongo:27017/edireg
+      MONG_URI: mongodb://mongo:27017/edireg?replicaSet=rs0
       PORT: 4000
       FRONTEND_URL: http://localhost:3000
       AUTH0_ISSUER_BASE_URL: ${AUTH0_ISSUER_BASE_URL:-}
       AUTH0_AUDIENCE: ${AUTH0_AUDIENCE:-}
     depends_on:
-      mongo:
-        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:4000/').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
       interval: 10s

@@ -20,6 +20,20 @@ const bundledResources = {
 			updateTimer: 'Update timer',
 			limitApproaching: 'Parking space {{parkingNumber}} is approaching its time limit',
 		},
+		visits: {
+			frequentVisitorCreated: 'Frequent visitor created.',
+			visitRegistered: 'Visit registered.',
+			errors: {
+				frequentVisitorExists: 'A frequent visitor with this RUT already exists.',
+				invalidFrequentVisitor: 'Review the frequent visitor details.',
+				invalidVisit: 'Review the visit details.',
+				noAvailableParking: 'There are no visitor parking spaces available.',
+				residenceNotFound: 'The selected residence does not exist.',
+				registrationFailed: 'The visit could not be registered.',
+				searchFailed: 'The visitor search failed.',
+				visitorNotFound: 'No frequent visitor was found.',
+			},
+		},
 	},
 	es: {
 		accessDeniedMessage: 'Tu rol no permite acceder a esta sección.',
@@ -34,6 +48,20 @@ const bundledResources = {
 			updateError: 'No fue posible actualizar el temporizador', updateSuccess: 'Configuración del temporizador actualizada',
 			updateTimer: 'Actualizar temporizador',
 			limitApproaching: 'El estacionamiento {{parkingNumber}} está próximo a su límite de tiempo',
+		},
+		visits: {
+			frequentVisitorCreated: 'Visitante frecuente creado.',
+			visitRegistered: 'Visita registrada.',
+			errors: {
+				frequentVisitorExists: 'Ya existe un Visitante Frecuente con este RUT.',
+				invalidFrequentVisitor: 'Revisa los datos del Visitante Frecuente.',
+				invalidVisit: 'Revisa los datos de la visita.',
+				noAvailableParking: 'No hay Estacionamientos de Visita disponibles.',
+				residenceNotFound: 'La Residencia seleccionada no existe.',
+				registrationFailed: 'No fue posible registrar la visita.',
+				searchFailed: 'No fue posible buscar al visitante.',
+				visitorNotFound: 'No se encontró un Visitante Frecuente.',
+			},
 		},
 	},
 };
