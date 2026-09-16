@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FrequentVisitorForm from '../components/Visits/FrequentVisitorForm';
+import { useAuthenticatedFetch } from '../auth/useAuthenticatedFetch';
 import { API_URL } from '../config/api';
 import './FrequentVisitor.css';
 
@@ -12,11 +13,12 @@ const FrequentVisitor = () => {
 	const [visitorData, setVisitorData] = useState(initialVisitorData);
 	const [error, setError] = useState(null);
 	const { t } = useTranslation('visits');
+	const authenticatedFetch = useAuthenticatedFetch();
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const response = await fetch(`${API_URL}/api/visits/newFrequentVisitor`, {
+			const response = await authenticatedFetch(`${API_URL}/api/visits/newFrequentVisitor`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(visitorData),

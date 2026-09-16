@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import CourierInfo from '../components/Delivery/CourierInfo';
 import ResidenceNumber from '../components/Delivery/ResidenceNumber';
 import ResidentCheckbox from '../components/Delivery/ResidentsCheckbox';
+import { useAuthenticatedFetch } from '../auth/useAuthenticatedFetch';
 import { API_URL } from '../config/api';
 import './Delivery.css';
 
@@ -14,11 +15,12 @@ function Delivery() {
 	const [description, setDescription] = useState('');
 	const [selectedResidents, setSelectedResidents] = useState([]);
 	const [courierInfo, setCourierInfo] = useState({ firstName: '', lastName: '', rut: '', vehicleLicensePlate: '' });
+	const authenticatedFetch = useAuthenticatedFetch();
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const response = await fetch(`${API_URL}/api/residence/${residenceNumber}`);
+			const response = await authenticatedFetch(`${API_URL}/api/residence/${residenceNumber}`);
 			const json = await response.json();
 			if (!response.ok) throw new Error(json.error || 'Error retrieving residents');
 			setResidents(json.residents || []);
@@ -55,7 +57,7 @@ function Delivery() {
 		};
 
 		try {
-			const response = await fetch(`${API_URL}/api/packages/createPackage`, {
+			const response = await authenticatedFetch(`${API_URL}/api/packages/createPackage`, {
 				method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
 			});
 			const json = await response.json();

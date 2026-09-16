@@ -1,9 +1,11 @@
 const express = require('express');
 const { getResidence } = require('../controllers/residenceController');
+const { PERMISSIONS } = require('../middleware/permissions');
 
-const router = express.Router();
+function createResidenceRouter(requirePermissions) {
+	const router = express.Router();
+	router.get('/:residenceNumber', requirePermissions(PERMISSIONS.READ_OPERATIONS), getResidence);
+	return router;
+}
 
-// GET a single Residence
-router.get('/:residenceNumber', getResidence);
-
-module.exports = router;
+module.exports = createResidenceRouter;

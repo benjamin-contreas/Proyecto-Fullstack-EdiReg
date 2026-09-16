@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import VisitForm from '../components/Visits/VisitForm';
+import { useAuthenticatedFetch } from '../auth/useAuthenticatedFetch';
 import { API_URL } from '../config/api';
 import './Visits.css';
 
@@ -12,6 +13,7 @@ function Visits() {
 	const [searchType, setSearchType] = useState('rut');
 	const [assignedParkingSpace, setAssignedParkingSpace] = useState(null);
 	const { t } = useTranslation('visits');
+	const authenticatedFetch = useAuthenticatedFetch();
 
 	const searchVisitor = async (event) => {
 		event.preventDefault();
@@ -19,7 +21,7 @@ function Visits() {
 		const value = isRut ? visitorData.rut : visitorData.vehicleLicensePlate;
 		const query = isRut ? `rut=${encodeURIComponent(value)}` : `vehicleLicensePlate=${encodeURIComponent(value)}`;
 		try {
-			const response = await fetch(`${API_URL}/api/visits/${isRut ? 'searchRut' : 'searchPlate'}?${query}`);
+			const response = await authenticatedFetch(`${API_URL}/api/visits/${isRut ? 'searchRut' : 'searchPlate'}?${query}`);
 			const data = await response.json();
 			if (!response.ok) throw new Error(data.error || 'Failed to fetch visitor');
 			setVisitorData((current) => ({ ...current, ...data, residenceVisited: data.frequentApartment }));
@@ -42,7 +44,7 @@ function Visits() {
 			let parkingNumber = null;
 
 			if (visitorData.vehicleLicensePlate) {
-				const parkingResponse = await fetch(`${API_URL}/api/parkingSpace/assignSpace`, {
+				const parkingResponse = await authenticatedFetch(`${API_URL}/api/parkingSpace/assignSpace`, {
 					method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}),
 				});
 				const parkingData = await parkingResponse.json();
@@ -51,7 +53,7 @@ function Visits() {
 				parkingNumber = parkingData.parkingNumber;
 			}
 
-			const response = await fetch(`${API_URL}/api/visits/visitRegistry`, {
+			const response = await authenticatedFetch(`${API_URL}/api/visits/visitRegistry`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ ...visitorData, visitParkingId }),

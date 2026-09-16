@@ -3,12 +3,13 @@ const {
 	updateConfig,
 	getTimerConfig,
 } = require('../controllers/timerConfigController');
+const { PERMISSIONS } = require('../middleware/permissions');
 
-const router = express.Router();
+function createTimerConfigRouter(requirePermissions) {
+	const router = express.Router();
+	router.post('/updateConfig', requirePermissions(PERMISSIONS.MANAGE_CONFIGURATION), updateConfig);
+	router.get('/getConfig', requirePermissions(PERMISSIONS.READ_OPERATIONS), getTimerConfig);
+	return router;
+}
 
-// Update timer configuration
-router.post('/updateConfig', updateConfig);
-
-router.get('/getConfig', getTimerConfig);
-
-module.exports = router;
+module.exports = createTimerConfigRouter;

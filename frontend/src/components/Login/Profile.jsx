@@ -19,7 +19,7 @@ const Profile = () => {
 	return (
 		<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
 			<span style={{ color: 'rgb(148, 163, 184)' }}>{user?.name}</span>
-			<button onClick={() => logout({ returnTo: window.location.origin })}
+			<button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
 				onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
 				onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)}
 				style={baseStyle}>{t('Logout')}</button>

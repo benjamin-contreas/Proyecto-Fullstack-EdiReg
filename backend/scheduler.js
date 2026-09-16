@@ -19,7 +19,7 @@ nodeCron.schedule('* * * * *', async () => {
 		});
 
 		nearingTimeLimitSpaces.forEach((space) => {
-			global.io?.emit('notifyConcierge', `Parking space ${space.parkingNumber} is nearing its time limit`);
+			global.io?.emit('notifyConcierge', { parkingNumber: space.parkingNumber });
 		});
 	} catch (error) {
 		console.error('Error in parking scheduler:', error.message);
