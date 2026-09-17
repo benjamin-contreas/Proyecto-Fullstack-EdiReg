@@ -14,6 +14,17 @@ i18n.use(initReactI18next).init({
 					frequentVisitorCreated: 'Frequent visitor created',
 					visitRegistered: 'Visit registered',
 				},
+				delivery: {
+					title: 'Package registration', residenceNumber: 'Residence number', findResidence: 'Find residence',
+					residents: 'Residents', packageDescription: 'Package description', courierInformation: 'Courier information',
+					firstName: 'First name', lastName: 'Last name', rut: 'RUT', vehicleLicensePlate: 'Vehicle license plate',
+					registerPackage: 'Register package', packageRegistered: 'Package registered. Email notifications are not configured.',
+					errors: {
+						selectResidence: 'Find a residence before registering a package.',
+						residenceNotFound: 'The selected residence does not exist.',
+						invalidPackage: 'Review the package details.', registrationFailed: 'The package could not be registered.',
+					},
+				},
 			},
 			Start: { Logout: 'Logout' },
 			visits: {},

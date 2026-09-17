@@ -11,3 +11,12 @@ const apiMessageKeys = Object.freeze({
 export function apiMessageKey(errorCode, fallbackKey) {
 	return apiMessageKeys[errorCode] || fallbackKey;
 }
+
+const packageApiMessageKeys = Object.freeze({
+	invalid_package: 'app:delivery.errors.invalidPackage',
+	residence_not_found: 'app:delivery.errors.residenceNotFound',
+});
+
+export function packageApiMessageKey(errorCode) {
+	return packageApiMessageKeys[errorCode] || 'app:delivery.errors.registrationFailed';
+}

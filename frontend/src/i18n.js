@@ -34,6 +34,18 @@ const bundledResources = {
 				visitorNotFound: 'No frequent visitor was found.',
 			},
 		},
+		delivery: {
+			title: 'Package registration', residenceNumber: 'Residence number', findResidence: 'Find residence',
+			residents: 'Residents', packageDescription: 'Package description', courierInformation: 'Courier information',
+			firstName: 'First name', lastName: 'Last name', rut: 'RUT', vehicleLicensePlate: 'Vehicle license plate',
+			registerPackage: 'Register package', packageRegistered: 'Package registered. Email notifications are not configured.',
+			errors: {
+				selectResidence: 'Find a residence before registering a package.',
+				residenceNotFound: 'The selected residence does not exist.',
+				invalidPackage: 'Review the package details.',
+				registrationFailed: 'The package could not be registered.',
+			},
+		},
 	},
 	es: {
 		accessDeniedMessage: 'Tu rol no permite acceder a esta sección.',
@@ -61,6 +73,18 @@ const bundledResources = {
 				registrationFailed: 'No fue posible registrar la visita.',
 				searchFailed: 'No fue posible buscar al visitante.',
 				visitorNotFound: 'No se encontró un Visitante Frecuente.',
+			},
+		},
+		delivery: {
+			title: 'Registro de paquetes', residenceNumber: 'Número de residencia', findResidence: 'Buscar residencia',
+			residents: 'Residentes', packageDescription: 'Descripción del paquete', courierInformation: 'Información del repartidor',
+			firstName: 'Nombre', lastName: 'Apellido', rut: 'RUT', vehicleLicensePlate: 'Patente del vehículo',
+			registerPackage: 'Registrar paquete', packageRegistered: 'Paquete registrado. Las notificaciones por correo no están configuradas.',
+			errors: {
+				selectResidence: 'Busca una residencia antes de registrar un paquete.',
+				residenceNotFound: 'La residencia seleccionada no existe.',
+				invalidPackage: 'Revisa los datos del paquete.',
+				registrationFailed: 'No fue posible registrar el paquete.',
 			},
 		},
 	},

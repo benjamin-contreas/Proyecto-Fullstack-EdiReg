@@ -1,17 +1,17 @@
-import { useTranslation } from "react-i18next";
-
+import { useTranslation } from 'react-i18next';
 
 const ResidenceNumber = ({
 	handleSubmit,
 	residenceNumber,
 	handleResidenceNumberChange,
+	isLoading,
 }) => {
-	const { t } = useTranslation("delivery");
+	const { t } = useTranslation('app');
 	return (
 		<form className="mt-3" onSubmit={handleSubmit}>
 			<div className="mb-3">
 				<label htmlFor="residenceNumber" className="form-label">
-					Residence Number:
+					{t('delivery.residenceNumber')}
 				</label>
 				<input
 					type="text"
@@ -21,8 +21,8 @@ const ResidenceNumber = ({
 					className="form-control"
 				/>
 			</div>
-			<button className="btn btn-primary" type="submit">
-				{t('Submit')}
+			<button className="btn btn-primary" type="submit" disabled={isLoading}>
+				{t('delivery.findResidence')}
 			</button>
 		</form>
 	);

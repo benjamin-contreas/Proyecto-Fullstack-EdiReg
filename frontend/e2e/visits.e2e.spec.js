@@ -3,7 +3,7 @@ const http = require('node:http');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { expect, test } = require('@playwright/test');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const { MongoMemoryReplSet } = require('mongodb-memory-server');
 
 const audience = 'https://api.edireg.test';
@@ -168,6 +168,81 @@ test('la API rechaza el registro anónimo aunque se eluda la interfaz', async ({
 	const response = await request.post('http://127.0.0.1:4100/api/visits/visitRegistry', {
 		data: { firstName: 'Intruso', lastName: 'Anónimo', rut: '22222222-2', residenceVisited: '101' },
 	});
+	expect(response.status()).toBe(401);
+});
+
+test('la API registra un Package y comunica que el correo no está configurado', async ({ request }) => {
+	const residence = await mongoDatabase.collection('residences').findOne({ residenceNumber: 101 });
+	const response = await request.post('http://127.0.0.1:4100/api/packages/createPackage', {
+		headers: { Authorization: `Bearer ${accessToken}` },
+		data: {
+			targetResidenceId: residence._id.toString(),
+			description: 'Sobre de prueba',
+			deliveredAt: '2026-09-16T12:00:00.000Z',
+			status: 'At Reception',
+			courierInfo: { firstName: 'Paula', lastName: 'Courier' },
+		},
+	});
+
+	expect(response.status()).toBe(201);
+	expect(await response.json()).toMatchObject({
+		notification: { status: 'not_configured' },
+		packageEntry: { description: 'Sobre de prueba', targetResidenceId: residence._id.toString() },
+	});
+});
+
+test('el Conserje registra un Package y recibe un estado honesto de notificación', async ({ mount }) => {
+	const delivery = await mount('App/Concierge', { path: '/delivery' });
+	await delivery.getByLabel('Residence number').fill('101');
+	await delivery.getByRole('button', { name: 'Find residence' }).click();
+	await expect(delivery.getByText('Ana Demo')).toBeVisible();
+
+	await delivery.getByLabel('Package description').fill('Sobre de contrato');
+	await delivery.getByLabel('First name').fill('Paula');
+	await delivery.getByLabel('Last name').fill('Courier');
+	await delivery.getByRole('button', { name: 'Register package' }).click();
+
+	await expect(delivery.getByRole('status')).toHaveText(
+		'Package registered. Email notifications are not configured.'
+	);
+	await delivery.unmount();
+});
+
+test('un Package para una Residence inexistente no se persiste', async ({ request }) => {
+	const packagesBefore = await mongoDatabase.collection('packages').countDocuments({ description: 'Paquete inválido' });
+	const response = await request.post('http://127.0.0.1:4100/api/packages/createPackage', {
+		headers: { Authorization: `Bearer ${accessToken}` },
+		data: {
+			targetResidenceId: new ObjectId().toString(),
+			description: 'Paquete inválido',
+			deliveredAt: '2026-09-16T12:00:00.000Z',
+			status: 'At Reception',
+			courierInfo: { firstName: 'Paula', lastName: 'Courier' },
+		},
+	});
+
+	expect(response.status()).toBe(404);
+	expect(await response.json()).toEqual({ error: 'residence_not_found' });
+	expect(await mongoDatabase.collection('packages').countDocuments({ description: 'Paquete inválido' }))
+		.toBe(packagesBefore);
+});
+
+test('un Package inválido se rechaza como error de validación', async ({ request }) => {
+	const residence = await mongoDatabase.collection('residences').findOne({ residenceNumber: 101 });
+	const response = await request.post('http://127.0.0.1:4100/api/packages/createPackage', {
+		headers: { Authorization: `Bearer ${accessToken}` },
+		data: { targetResidenceId: residence._id.toString() },
+	});
+
+	expect(response.status()).toBe(400);
+	expect(await response.json()).toEqual({ error: 'invalid_package' });
+});
+
+test('la API de Packages rechaza solicitudes anónimas', async ({ request }) => {
+	const response = await request.post('http://127.0.0.1:4100/api/packages/createPackage', {
+		data: { description: 'Solicitud anónima' },
+	});
+
 	expect(response.status()).toBe(401);
 });
 
